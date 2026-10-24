@@ -17,6 +17,8 @@ provider "azuread" {}
 
 variable "subscription_id" { type = string }
 variable "github_org" { type = string }
+variable "github_owner_id" { type = string }
+variable "github_repo_id" { type = string }
 
 variable "github_repo" {
   type    = string
@@ -91,7 +93,7 @@ resource "azuread_application_federated_identity_credential" "pull_request" {
   display_name   = "github-pull-request"
   audiences      = ["api://AzureADTokenExchange"]
   issuer         = "https://token.actions.githubusercontent.com"
-  subject        = "repo:${var.github_org}/${var.github_repo}:pull_request"
+  subject        = "repo:${var.github_org}@${var.github_owner_id}/${var.github_repo}@${var.github_repo_id}:pull_request"
 }
 
 resource "azuread_application_federated_identity_credential" "env_dev" {
@@ -99,7 +101,7 @@ resource "azuread_application_federated_identity_credential" "env_dev" {
   display_name   = "github-env-dev"
   audiences      = ["api://AzureADTokenExchange"]
   issuer         = "https://token.actions.githubusercontent.com"
-  subject        = "repo:${var.github_org}/${var.github_repo}:environment:dev"
+  subject        = "repo:${var.github_org}@${var.github_owner_id}/${var.github_repo}@${var.github_repo_id}:environment:dev"
 }
 
 resource "azurerm_role_assignment" "github_contributor" {
