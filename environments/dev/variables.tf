@@ -23,7 +23,7 @@ variable "vm_size" {
 variable "enable_compute" {
   description = "Turn the VM off to stop any compute cost while keeping network + security."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "admin_ssh_public_key" {
