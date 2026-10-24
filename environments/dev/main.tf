@@ -25,6 +25,7 @@ locals {
     environment = var.environment
     project     = "msp-landing-zone"
     managed_by  = "terraform"
+    owner       = "jayden"
   }
 
   subnets = {
