@@ -78,3 +78,14 @@ az vm run-command invoke -g rg-acme-dev -n vm-acme-dev-app \
 
 Copy `environments/dev` to `environments/<client>-prod`, change `client_name`, the state `key`,
 and (for a separate Environment/approval gate) add a matching federated credential in bootstrap.
+
+## Results
+
+### Deployed resources (rg-acme-dev)
+![Resource group showing the VNet, NSGs, Key Vault and managed identity](docs/images/resource-group.png)
+
+### NSG rules created by Terraform
+![Inbound rules on nsg-acme-dev-app](docs/images/nsg-rules.png)
+
+### Pipeline history
+![GitHub Actions runs: four failures fixed, then a green apply](docs/images/pipeline-runs.png)
