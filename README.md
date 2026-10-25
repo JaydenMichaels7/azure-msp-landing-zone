@@ -99,5 +99,5 @@ and (for a separate Environment/approval gate) add a matching federated credenti
 ### Terraform Apply
 ![Apply complete: 6 changed, 0 destroyed](docs/images/apply-complete.png)
 
-### Azure Tags
+### Azure Tags (rg-acme-dev)
 ![owner tag visible on the resource group in Azure](docs/images/azure-tags.png)
