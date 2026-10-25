@@ -90,15 +90,14 @@ and (for a separate Environment/approval gate) add a matching federated credenti
 ### Pipeline history
 ![GitHub Actions runs: four failures fixed, then a green apply](docs/images/pipeline-runs.png)
 
-## Review before apply
-
-Every change goes through a pull request. The pipeline posts a plan, I check that
-nothing is destroyed or replaced, then merge and let the pipeline apply.
-
+### Pull Request Plan
 ![Plan output showing the owner tag added to six resources](docs/images/pr-plan.png)
 
+### Pull Request Merged
 ![Merged pull request with description and expected plan](docs/images/pr-merged.png)
 
+### Terraform Apply
 ![Apply complete: 6 changed, 0 destroyed](docs/images/apply-complete.png)
 
+### Azure Tags
 ![owner tag visible on the resource group in Azure](docs/images/azure-tags.png)
