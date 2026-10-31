@@ -131,3 +131,9 @@ deploy without the VM. The VM can be re-enabled through a pull request when capa
 ### What I took from it
 Reading the log to find the cause beat guessing. Capacity and quota are real
 constraints that code review cannot catch.
+
+**Retry:** I added a `zone` parameter to the compute module and retried with the VM
+pinned to zones 1, 2 and 3. All three returned `SkuNotAvailable` (capacity
+restrictions for Standard_B1s in uksouth), so the shortage covers the whole region,
+not a single zone. The VM stays disabled behind the `enable_compute` flag, and the
+rest of the landing zone is deployed.
