@@ -58,6 +58,8 @@ jobs:
           directory: .
           framework: terraform
           soft_fail: true     # report-only at first; make blocking once findings are triaged
+          quiet: true
+          compact: true
       
       - name: Trivy IaC scan (successor to tfsec)
         uses: aquasecurity/trivy-action@v0.36.0
