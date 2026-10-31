@@ -29,7 +29,7 @@ variable "enable_compute" {
 variable "vm_zone" {
   description = "Availability zone for the VM (1, 2 or 3). null lets Azure choose."
   type        = string
-  default     = "1"
+  default     = "2"
 }
 
 variable "admin_ssh_public_key" {
