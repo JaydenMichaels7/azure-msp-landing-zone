@@ -1,0 +1,3 @@
+# State storage must stay reachable from GitHub runners (Entra ID auth only, shared keys disabled)
+AZU-0012
+AVD-AZU-0012

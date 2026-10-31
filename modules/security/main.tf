@@ -15,6 +15,11 @@ resource "azurerm_user_assigned_identity" "workload" {
 }
 
 resource "azurerm_key_vault" "this" {
+  #checkov:skip=CKV_AZURE_189:GitHub runners must write secrets; private access needs paid networking
+  #checkov:skip=CKV_AZURE_109:Same reason as the public network decision above
+  #checkov:skip=CKV2_AZURE_32:Private endpoint needs paid networking and self-hosted runners
+  #checkov:skip=CKV_AZURE_110:Purge protection off in the lab so destroy works
+  #checkov:skip=CKV_AZURE_42:Same reason as purge protection above
   name                       = "kv-${var.name_prefix}-${random_string.kv.result}"
   location                   = var.location
   resource_group_name        = var.resource_group_name
@@ -61,9 +66,10 @@ resource "random_password" "demo" {
 }
 
 resource "azurerm_key_vault_secret" "demo" {
-  name         = "demo-app-secret"
-  value        = random_password.demo.result
-  key_vault_id = azurerm_key_vault.this.id
-  content_type = "demo-only"
-  depends_on   = [time_sleep.rbac_propagation]
+  name            = "demo-app-secret"
+  value           = random_password.demo.result
+  key_vault_id    = azurerm_key_vault.this.id
+  content_type    = "demo-only"
+  expiration_date = "2027-12-31T00:00:00Z"
+  depends_on      = [time_sleep.rbac_propagation]
 }
