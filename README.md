@@ -101,3 +101,33 @@ and (for a separate Environment/approval gate) add a matching federated credenti
 
 ### Azure Tags (rg-acme-dev)
 ![owner tag visible on the resource group in Azure](docs/images/azure-tags.png)
+
+## What went wrong and how I fixed it
+
+### 1. TFLint failed the first pipeline runs
+**Symptom:** The validate job failed with `exit code 2`: "Missing version constraint
+for provider" and "terraform required_version attribute is required".
+**Cause:** My modules didn't declare which Terraform and provider versions they need,
+so a future provider release could silently change their behaviour.
+**Fix:** Added a `versions.tf` to each module with `required_version` and pinned
+provider constraints.
+
+### 2. Azure rejected the pipeline's login
+**Symptom:** `terraform init` failed with `AADSTS700213: No matching federated
+identity record found`.
+**Cause:** GitHub sent an ID-qualified OIDC subject
+(`repo:<owner>@<id>/<repo>@<id>:environment:dev`), but I had registered the plain form.
+**Fix:** Added the owner and repo IDs as bootstrap variables, updated both federated
+credentials, and re-applied. The pipeline now authenticates with no stored secrets.
+
+### 3. The VM could not be created
+**Symptom:** `SkuNotAvailable ... Capacity Restrictions: Standard_B1s is currently
+not available in location 'uksouth'`.
+**Cause:** `az vm list-skus` only reports what my subscription may use. It cannot show
+whether Azure has spare capacity, which only appears at deployment.
+**Fix:** Added an `enable_compute` switch so the network, identity and Key Vault could
+deploy without the VM. The VM can be re-enabled through a pull request when capacity returns.
+
+### What I took from it
+Reading the log to find the cause beat guessing. Capacity and quota are real
+constraints that code review cannot catch.
