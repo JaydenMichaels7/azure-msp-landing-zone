@@ -23,7 +23,13 @@ variable "vm_size" {
 variable "enable_compute" {
   description = "Turn the VM off to stop any compute cost while keeping network + security."
   type        = bool
-  default     = false
+  default     = true
+}
+
+variable "vm_zone" {
+  description = "Availability zone for the VM (1, 2 or 3). null lets Azure choose."
+  type        = string
+  default     = "1"
 }
 
 variable "admin_ssh_public_key" {

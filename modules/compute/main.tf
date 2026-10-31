@@ -19,6 +19,7 @@ resource "azurerm_linux_virtual_machine" "this" {
   location                        = var.location
   resource_group_name             = var.resource_group_name
   size                            = var.vm_size
+  zone                            = var.zone
   admin_username                  = var.admin_username
   disable_password_authentication = true
   network_interface_ids           = [azurerm_network_interface.this[0].id]
