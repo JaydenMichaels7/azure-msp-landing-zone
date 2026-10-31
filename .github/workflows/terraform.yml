@@ -58,6 +58,14 @@ jobs:
           directory: .
           framework: terraform
           soft_fail: true     # report-only at first; make blocking once findings are triaged
+      
+      - name: Trivy IaC scan (successor to tfsec)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: config
+          scan-ref: .
+          severity: HIGH,CRITICAL
+          exit-code: "0"      # report-only at first
 
   plan:
     name: Plan
