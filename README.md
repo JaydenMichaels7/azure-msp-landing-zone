@@ -137,3 +137,34 @@ pinned to zones 1, 2 and 3. All three returned `SkuNotAvailable` (capacity
 restrictions for Standard_B1s in uksouth), so the shortage covers the whole region,
 not a single zone. The VM stays disabled behind the `enable_compute` flag, and the
 rest of the landing zone is deployed.
+
+## Security scanning
+
+Every push runs two IaC scanners, **Checkov** and **Trivy** (the successor to tfsec,
+which is no longer maintained). Both are blocking: **Validate and scan** is a required
+status check in the `main` ruleset, so a new finding stops a merge until it is fixed or
+documented.
+
+The first scan reported 14 Checkov findings and 2 Trivy findings. I sorted each one
+into fix, accept, or out of scope.
+
+### Fixed
+| Finding | Change |
+|---|---|
+| Key Vault secret had no expiry date (`CKV_AZURE_41`) | Added `expiration_date` to the demo secret |
+| OIDC credential could be used by any branch workflow (`CKV_AZURE_249`) | Restricted the `dev` GitHub Environment to the `main` branch; subject claims are pinned to one repository |
+
+### Accepted, with the reason written next to the code
+| Finding | Reason |
+|---|---|
+| State storage and Key Vault reachable from the internet (`CKV_AZURE_59`, `CKV_AZURE_189`, `CKV_AZURE_109`, `CKV2_AZURE_33`, `CKV2_AZURE_32`, Trivy `AZU-0012` and the Key Vault network rule) | GitHub-hosted runners have changing IP addresses, so locking these down needs private endpoints and self-hosted runners (paid). Access is Entra ID only, shared keys are disabled, and TLS 1.2 is the minimum |
+| Purge protection and recoverability off (`CKV_AZURE_110`, `CKV_AZURE_42`) | Off in the lab so `terraform destroy` works. Production would turn it on |
+| LRS replication (`CKV_AZURE_206`) | Cost. Production state would use GRS or ZRS |
+| Queue service logging (`CKV_AZURE_33`) | The Queue service is not used |
+
+### Out of scope for a free-tier lab
+Customer-managed encryption keys (`CKV2_AZURE_1`) and blob read logging
+(`CKV2_AZURE_21`) need extra Key Vault keys and a Log Analytics workspace.
+
+Accepted findings are suppressed inline (`#checkov:skip=ID:reason`) or in
+`.trivyignore`, each with a written reason, so every exception is a visible decision.
