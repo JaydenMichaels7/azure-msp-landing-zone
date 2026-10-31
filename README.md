@@ -168,3 +168,13 @@ Customer-managed encryption keys (`CKV2_AZURE_1`) and blob read logging
 
 Accepted findings are suppressed inline (`#checkov:skip=ID:reason`) or in
 `.trivyignore`, each with a written reason, so every exception is a visible decision.
+
+## Architecture
+
+![Architecture of the MSP landing zone](docs/images/architecture.png)
+
+*Diagram generated with GitDiagram from this repository and checked by hand. The
+Ubuntu VM is shown as optional because it is disabled (`enable_compute = false`) after
+Azure returned capacity errors in every uksouth availability zone. The pipeline also
+runs TFLint, Checkov and Trivy and posts a plan on pull requests, which this diagram
+does not show.*
