@@ -57,7 +57,7 @@ jobs:
         with:
           directory: .
           framework: terraform
-          soft_fail: true     # report-only at first; make blocking once findings are triaged
+          soft_fail: false     
           quiet: true
           compact: true
       
@@ -67,7 +67,7 @@ jobs:
           scan-type: config
           scan-ref: .
           severity: HIGH,CRITICAL
-          exit-code: "0"      # report-only at first
+          exit-code: "1"      
 
   plan:
     name: Plan

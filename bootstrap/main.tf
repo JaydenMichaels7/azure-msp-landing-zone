@@ -50,6 +50,11 @@ resource "azurerm_resource_group" "state" {
 }
 
 resource "azurerm_storage_account" "state" {
+  #checkov:skip=CKV_AZURE_59:State account must stay reachable from GitHub runners; access is Entra ID only
+  #checkov:skip=CKV2_AZURE_33:Private endpoint needs paid networking and self-hosted runners
+  #checkov:skip=CKV_AZURE_206:LRS chosen for cost; production would use GRS or ZRS
+  #checkov:skip=CKV_AZURE_33:Queue service is not used by this account
+  #checkov:skip=CKV2_AZURE_1:Customer-managed keys are out of scope for the free-tier lab
   name                            = "stmsptf${random_string.suffix.result}"
   resource_group_name             = azurerm_resource_group.state.name
   location                        = azurerm_resource_group.state.location
@@ -68,6 +73,7 @@ resource "azurerm_storage_account" "state" {
 }
 
 resource "azurerm_storage_container" "tfstate" {
+  #checkov:skip=CKV2_AZURE_21:Blob read logging needs Log Analytics and is out of scope for the lab
   name                  = "tfstate"
   storage_account_id    = azurerm_storage_account.state.id
   container_access_type = "private"
@@ -89,6 +95,7 @@ resource "azuread_service_principal" "github" {
 }
 
 resource "azuread_application_federated_identity_credential" "pull_request" {
+  #checkov:skip=CKV_AZURE_249:Subject is pinned to one repo; dev environment restricted to the main branch
   application_id = azuread_application.github.id
   display_name   = "github-pull-request"
   audiences      = ["api://AzureADTokenExchange"]
@@ -97,6 +104,7 @@ resource "azuread_application_federated_identity_credential" "pull_request" {
 }
 
 resource "azuread_application_federated_identity_credential" "env_dev" {
+  #checkov:skip=CKV_AZURE_249:Subject is pinned to one repo; dev environment restricted to the main branch
   application_id = azuread_application.github.id
   display_name   = "github-env-dev"
   audiences      = ["api://AzureADTokenExchange"]
