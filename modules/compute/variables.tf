@@ -50,3 +50,9 @@ variable "tags" {
   type    = map(string)
   default = {}
 }
+
+variable "zone" {
+  description = "Availability zone for the VM (1, 2 or 3). null lets Azure choose."
+  type        = string
+  default     = null
+}

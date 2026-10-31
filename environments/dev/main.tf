@@ -104,6 +104,7 @@ module "compute" {
   identity_id          = module.security.identity_id
   admin_ssh_public_key = var.admin_ssh_public_key
   vm_size              = var.vm_size
+  zone                 = var.vm_zone
   enabled              = var.enable_compute
   tags                 = local.tags
 }
