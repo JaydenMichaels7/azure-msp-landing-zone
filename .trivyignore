@@ -1,3 +1,7 @@
 # State storage must stay reachable from GitHub runners (Entra ID auth only, shared keys disabled)
 AZU-0012
 AVD-AZU-0012
+
+# Key Vault must accept writes from GitHub runners; production would use a private endpoint
+AZU-0013
+AVD-AZU-0013
